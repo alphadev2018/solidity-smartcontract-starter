@@ -1,11 +1,9 @@
-pragma solidity >=0.4.21 <0.6.0;
+pragma solidity ^0.5.0;
 
 import {Toggled} from "./Toggled.sol";
-import "./SafeMath.sol";
 
 contract Splitter is Toggled {
 
-    using SafeMath for uint;
     mapping(address => uint) private balances;
 
     event LogEthSplitted(
@@ -33,10 +31,10 @@ contract Splitter is Toggled {
 
     function withdraw() public {
         uint amount = balances[msg.sender];
-        require(amount > 0, "No balance available");
         balances[msg.sender] = 0;
-        emit LogEthWithdrawal(msg.sender, amount);
+        require(amount > 0, "No balance available");
         msg.sender.transfer(amount);
+        emit LogEthWithdrawal(msg.sender, amount);
     }
 
     function() external {
